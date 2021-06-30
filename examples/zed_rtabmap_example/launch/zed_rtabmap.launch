@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <!--
 Copyright (c) 2018, STEREOLABS.
-
 All rights reserved.
-
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -17,6 +15,10 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <launch>
+    <!--<include file="$(find sim_sentry)/launch/sentry.launch" /> -->
+    <arg name="database_path"        default="rtabmap.db"/>
+      
+    <arg name="localization"         default="false"/>
     <arg name="svo_file"             default="" /> <!-- <arg name="svo_file" default="path/to/svo/file.svo"> -->
     <arg name="stream"               default="" /> <!-- <arg name="stream" default="<ip_address>:<port>"> -->
 
@@ -30,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     <group ns="$(arg camera_name)">
         <!-- ZED Wrapper Node-->
-        <include file="$(find zed_wrapper)/launch/include/zed_camera.launch.xml">
+        <include file="$(find sentry_description)/launch/zed_camera.launch.xml">
             <arg name="camera_name"         value="$(arg camera_name)" />
             <arg name="svo_file"            value="$(arg svo_file)" />
             <arg name="stream"              value="$(arg stream)" />
@@ -38,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <arg name="camera_model"        value="$(arg camera_model)" />
             <arg name="base_frame"          value="$(arg base_frame)" />
             <arg name="publish_urdf"        value="$(arg publish_urdf)" />
-        </include>    
+        </include> 
   
         <!-- RTAB-Map -->
         <arg name="custom_rtabmap_launch_file" default="$(find zed_rtabmap_example)/launch/include/sl_rtabmap.launch.xml"/>
@@ -49,6 +51,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <arg name="camera_info_topic"       default="$(arg zed_node_name)/rgb/camera_info" />
             <arg name="depth_camera_info_topic" default="$(arg zed_node_name)/depth/camera_info" />
         </include>   
+        <param if="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="false"/>
+        <param if="$(arg localization)" name="Mem/InitWMWithAllNodes" type="string" value="true"/>
+        <param name="LccIcp/Type" type="string" value="0"/>
+        <param name="Reg/Strategy" type="string" value="0"/>
+        <param name="Icp/CorrespondenceRatio" type="string" value="0.15"/>
+        <param name="RGBD/OptimizeMaxError" value="0"/>
+        <param name="odom_frame_id" value="$(arg zed_node_name)/odom"/> <!-- adjust to actual odometry frame id -->
+        <param name="odom_tf_linear_variance" value="0.0001"/> <!-- adjust depending on real odom error -->
+        <param name="odom_tf_angular_variance" value="0.0005"/> <!-- adjust depending on real odom error -->
+        <param name="StartNewMapOnLoopClosure" value="true"/>
+
 
         <!-- Rviz -->
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find zed_rtabmap_example)/rviz/zed-rtabmap.rviz" output="screen" /> 

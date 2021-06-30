@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <!--
 Copyright (c) 2020, STEREOLABS.
-
 All rights reserved.
-
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -17,6 +15,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <launch>
+    <!--<include file="/home/krishan/catkin_ws/src/sim_sentry/launch/robot_config.launch"/>-->
     <!-- Camera Model and Name -->
     <arg name="camera_name"           default="zed" /> <!-- The name you want -->
     <arg name="camera_model"          default="zed2" /> <!-- 'zed' or 'zedm' or 'zed2' -->
@@ -49,6 +48,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <!-- Name of the Nodelet Manager -->
     <arg name="nodelet_manager_name"  default="$(arg camera_name)_nodelet_manager" />
 
+
+
     <group ns="$(arg camera_name)">
         <!-- Nodelet Manager -->
         <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager_name)"  args="manager" output="screen" />
@@ -69,8 +70,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <arg name="cam_roll"                        value="$(arg cam_roll)" />
             <arg name="cam_pitch"                       value="$(arg cam_pitch)" />
             <arg name="cam_yaw"                         value="$(arg cam_yaw)" />
-        </include>
-
+        </include> 
         <!-- Virtual laser scan as nodelet -->
         <!-- "$ sudo apt install ros-kinetic-depthimage-to-laserscan" -->
         <node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan" args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet $(arg nodelet_manager_name)">
@@ -78,6 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
              <param name="output_frame_id" value="$(arg camera_name)_left_camera_frame"/>
              <param name="range_min" value="0.1"/>
              <remap from="image" to="$(arg zed_nodelet_name)/depth/depth_registered"/>
+             <remap from="/zed/scan" to="/scan" />
         </node>
     </group>
 </launch>
