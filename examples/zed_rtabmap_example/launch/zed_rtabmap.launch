@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <!-- RTAB-Map -->
         <arg name="custom_rtabmap_launch_file" default="$(find zed_rtabmap_example)/launch/include/sl_rtabmap.launch.xml"/>
         <include file="$(arg custom_rtabmap_launch_file)">
-            <arg name="odom_topic"              default="$(arg zed_node_name)/odom" />
+            <arg name="odom_topic"              default="/odometry/filtered" />
             <arg name="rgb_topic"               default="$(arg zed_node_name)/rgb/image_rect_color" />
             <arg name="depth_topic"             default="$(arg zed_node_name)/depth/depth_registered" />
             <arg name="camera_info_topic"       default="$(arg zed_node_name)/rgb/camera_info" />
@@ -57,10 +57,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <param name="Reg/Strategy" type="string" value="0"/>
         <param name="Icp/CorrespondenceRatio" type="string" value="0.15"/>
         <param name="RGBD/OptimizeMaxError" value="0"/>
-        <param name="odom_frame_id" value="$(arg zed_node_name)/odom"/> <!-- adjust to actual odometry frame id -->
+        <param name="odom_frame_id" value=""/> <!-- adjust to actual odometry frame id -->
         <param name="odom_tf_linear_variance" value="0.0001"/> <!-- adjust depending on real odom error -->
         <param name="odom_tf_angular_variance" value="0.0005"/> <!-- adjust depending on real odom error -->
         <param name="StartNewMapOnLoopClosure" value="true"/>
+        <param name="publish_tf" value="false"/>
+        
 
 
         <!-- Rviz -->
