@@ -53,6 +53,10 @@
         <param     if="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="false"/>
         <param unless="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="true"/>
         <param name="Mem/InitWMWithAllNodes" type="string" value="$(arg localization)"/>
+        <param name="Odom/Strategy" type="string" value="1"/>
+        <param name="Odom/GuessMotion" type="string" value="true"/>
+        <param name="Vis/EstimationType" type="string" value="1"/>
+        <param name="Vis/CorTYpe" type="string" value="1"/>
     </node>
 
     
