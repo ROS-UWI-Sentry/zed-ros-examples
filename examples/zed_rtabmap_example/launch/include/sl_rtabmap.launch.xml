@@ -13,7 +13,7 @@
     <arg name="camera_info_topic"       default="/zed/zed_node/rgb/camera_info" />
     <arg name="depth_camera_info_topic" default="/zed/zed_node/depth/camera_info" />
 
-    <arg name="odom_topic"              default="odometry/filtered" />    <!-- Odometry topic name -->
+    <arg name="odom_topic"              default="/zed/zed_node/odom" />    <!-- Odometry topic name -->
     <!--<arg name="odom_topic"              default="odom" />-->
     
 
@@ -34,7 +34,7 @@
         <remap from="rgb/camera_info"   to="$(arg camera_info_topic)"/>
 
         <remap from="grid_map"          to="map" />
-        <remap from="odom"      to="/odometry/filtered"/>
+        <remap from="odom"              to="/zed/zed_node/odom"/>
     </node> 
 
 
@@ -47,7 +47,7 @@
         <remap from="rgb/camera_info"   to="$(arg camera_info_topic)"/>
 
         <remap from="grid_map"          to="map" />
-        <remap from="odom"              to="/odometry/filtered"/>
+        <remap from="odom"              to="/zed/zed_node/odom"/>
 
         <!-- localization mode -->
         <param     if="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="false"/>
@@ -57,6 +57,7 @@
         <param name="Odom/GuessMotion" type="string" value="true"/>
         <param name="Vis/EstimationType" type="string" value="1"/>
         <param name="Vis/CorTYpe" type="string" value="1"/>
+        
     </node>
 
     
